@@ -1,0 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap");
+
+:root {
+	font-size: 16px;
+	--lite-grey: #f7f8f8;
+	--med-lite-grey: #e0e0e0;
+	--med-grey: #646e73;
+	--med-dark-grey: #8b8680;
+	--black: #0e1e25;
+	--primary: #146396;
+	--primary-dark: #15847d;
+	--accent: #e29e21;
+	--accent-dark: #cb8e1d;
+	--error: #cc0000;
+	--font-default: "Raleway", sans-serif;
+}
+
+#root {
+	height: 100%;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--med-dark-grey) var(--lite-grey);
+}
+
+*::-webkit-scrollbar {
+	width: 5px;
+}
+*::-webkit-scrollbar-thumb {
+	background-color: var(--med-dark-grey);
+	border-radius: 10px;
+}
+
+body,
+html {
+	height: 100%;
+}
+
+body,
+html,
+section,
+article,
+figure,
+main,
+div,
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0;
+	margin-block-end: 0;
+	margin-inline-start: 0;
+	margin-inline-end: 0;
+	padding: 0;
+	font-family: var(--font-default);
+	color: var(--med-grey);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+input,
+textarea {
+	overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+	margin: 0;
+}
+
+h1 {
+	font-size: 1.25rem;
+}
+
+h2 {
+	font-size: 1.15rem;
+}
+
+h3 {
+	font-size: 1.05rem;
+	font-weight: 600;
+}
+
+@media (min-width: 768px) {
+	h1 {
+		font-size: 1.5rem;
+	}
+	h2 {
+		font-size: 1.25rem;
+	}
+	h3 {
+		font-size: 1.15rem;
+	}
+}
+
+button {
+	cursor: pointer;
+	background-color: transparent;
+	font-family: inherit;
+}
+
+a {
+	text-decoration: none;
+	color: var(--primary);
+	font-weight: 500;
+}
+
+a:hover {
+	color: var(--accent);
+}
