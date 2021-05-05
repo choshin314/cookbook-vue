@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 
+import RecipeCreate from "@/views/RecipeCreate";
+
 Vue.use(Router);
 
 const routes = [
@@ -21,6 +23,11 @@ const routes = [
 		path: "/feeds/home",
 		name: "home-private",
 		props: { feedType: "private" }
+	},
+	{
+		path: "/recipes/create",
+		name: "create-recipe",
+		component: RecipeCreate
 	}
 ];
 
