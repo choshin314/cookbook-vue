@@ -1,29 +1,37 @@
 <template>
 	<div class="container">
 		<section>
-			<label for="file-input">Select File</label>
-			<input
-				id="file-input"
-				type="file"
-				accept="image/png, image/jpeg, image/jpg"
-				@input="handleFileInput"
-				:files="recipe.coverImg"
-			/>
+			<div>
+				<label for="cover-img-input">Select File</label>
+				<div class="preview-div" v-if="previewImg">
+					<img :src="previewImg" alt="" />
+				</div>
+				<input
+					id="cover-img-input"
+					name="coverImg"
+					type="file"
+					accept="image/png, image/jpeg, image/jpg"
+					@input="handleInput"
+					:files="recipe.coverImg"
+				/>
+			</div>
 		</section>
 		<section>
 			<base-input
-				id="title"
+				name="title"
 				type="text"
 				label="Recipe Title"
 				placeholder="What are we making?"
-				v-model="recipe.title"
+				@input="handleInput"
+				:value="recipe.title"
 			/>
 			<base-textarea
-				id="intro"
+				name="intro"
 				label="Introduction"
 				rows="8"
 				placeholder="Give a short and sweet intro about your recipe"
-				v-model="recipe.intro"
+				@input="handleInput"
+				:value="recipe.intro"
 			/>
 		</section>
 		<section></section>
@@ -33,19 +41,27 @@
 					type="number"
 					label="Prep (Mins.)"
 					min="1"
-					v-model="recipe.prepTime"
+					id="prep-time"
+					name="prepTime"
+					@input="handleInput"
+					:value="recipe.prepTime"
 				/>
 				<base-input
+					id="cook-time"
+					name="cookTime"
 					type="number"
 					label="Cook (Mins.)"
 					min="1"
-					v-model="recipe.cookTime"
+					@input="handleInput"
+					:value="recipe.cookTime"
 				/>
 				<base-input
+					name="servings"
 					type="number"
 					label="Servings"
 					min="1"
-					v-model="recipe.servings"
+					@input="handleInput"
+					:value="recipe.servings"
 				/>
 			</div>
 		</section>
@@ -56,13 +72,24 @@
 export default {
 	name: "RecipeFormPageOne",
 	props: {
-		recipe: Object
+		recipe: Object,
+		handleInput: Function
 	},
 	methods: {
-		handleFileInput(event) {
-			if (event.target.files && event.target.files.length) {
-				this.recipe.coverImg = event.target.files;
+		// handleInput(event) {
+		// 	const { name, value, files } = event.target;
+		// 	this.recipe[name] = value;
+		// 	if (files) {
+		// 		this.recipe[name] = files;
+		// 	}
+		// }  move this up to main RecipeCreate
+	},
+	computed: {
+		previewImg: function() {
+			if (this.recipe.coverImg) {
+				return URL.createObjectURL(this.recipe.coverImg[0]);
 			}
+			return "";
 		}
 	}
 };
@@ -89,6 +116,15 @@ export default {
 		& input {
 			width: 100%;
 		}
+	}
+}
+
+.preview-div {
+	overflow: hidden;
+	& > img {
+		object-fit: cover;
+		height: 100%;
+		width: 100%;
 	}
 }
 </style>

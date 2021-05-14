@@ -1,8 +1,11 @@
 <template>
 	<base-main>
 		<base-card class="form-wrapper">
-			<form class="form">
-				<RecipeFormPageOne :recipe="recipe" />
+			<form class="form" @submit.prevent="handleSubmit">
+				<RecipeFormPageOne
+					:recipe="recipe"
+					:handleInput="handleInput"
+				/>
 				<div class="button-div">
 					<base-button
 						class="button-primary"
@@ -10,6 +13,7 @@
 						>Home</base-button
 					>
 					<base-button
+						type="submit"
 						class="button-accent"
 						:iconLeft="['fas', 'home']"
 						>Home</base-button
@@ -44,6 +48,16 @@ export default {
 				ingredients: [],
 				tags: []
 			};
+		},
+		handleInput(event) {
+			const { name, value, files } = event.target;
+			this.recipe[name] = value;
+			if (files) {
+				this.recipe[name] = files;
+			}
+		},
+		handleSubmit() {
+			console.log(this.recipe);
 		}
 	}
 };

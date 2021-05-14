@@ -5,7 +5,7 @@
 			v-bind="$attrs"
 			class="textarea"
 			:value="value"
-			v-on="listeners"
+			v-on="$listeners"
 		/>
 	</div>
 </template>
