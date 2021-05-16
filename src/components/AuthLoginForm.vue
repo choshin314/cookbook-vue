@@ -1,0 +1,75 @@
+<template>
+  <AuthForm @submit.prevent="loginOrRegister({ mode: 'login', values })">
+    <div class="input-row">
+      <base-input
+        type="text"
+        label="Username or Email"
+        name="emailUsername"
+        :value="values.emailUsername"
+        @input="handleChange"
+      />
+    </div>
+    <div class="input-row">
+      <base-input
+        type="password"
+        label="Password"
+        name="password"
+        :value="values.password"
+        @input="handleChange"
+      />
+    </div>
+    <base-button type="submit" variant="primary">Sign In</base-button>
+    <router-link :to="{ name: 'auth-register' }" class="form-link"
+      >Don't have an account? Sign up for free</router-link
+    >
+  </AuthForm>
+</template>
+
+<script>
+import AuthForm from "./AuthForm";
+import authService from "@/services/AuthService";
+import { mapActions } from "vuex";
+
+export default {
+  name: "AuthLoginForm",
+  components: { AuthForm },
+  data() {
+    return {
+      values: this.resetValues()
+    };
+  },
+  methods: {
+    resetValues() {
+      return {
+        emailUsername: "",
+        password: ""
+      };
+    },
+    handleChange(event) {
+      const { name, checked, value, files } = event.target;
+      this.values[name] = files || checked || value;
+    },
+    async handleSubmit() {
+      if (!this.values.emailUsername || !this.values.password) {
+        console.log("required fields!");
+        return;
+      }
+      const response = await authService.postLogin(this.values);
+      console.log(response);
+    },
+    ...mapActions("auth", ["loginOrRegister"])
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.input-row {
+  margin-bottom: $space-m;
+}
+
+.form-link {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: $space-s;
+}
+</style>

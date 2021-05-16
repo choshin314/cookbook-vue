@@ -1,4 +1,3 @@
 module.exports = {
-	tabWidth: 4,
-	useTabs: true
+	tabWidth: 2
 };
