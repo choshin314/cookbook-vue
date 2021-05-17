@@ -19,7 +19,9 @@
       />
     </div>
     <base-button type="submit" variant="primary">Sign In</base-button>
-    <router-link :to="{ name: 'auth-register' }" class="form-link"
+    <router-link
+      :to="{ name: 'auth', params: { authMode: 'register' } }"
+      class="form-link"
       >Don't have an account? Sign up for free</router-link
     >
   </AuthForm>

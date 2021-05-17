@@ -1,11 +1,11 @@
 <template>
   <li class="nav-item" v-on="$listeners" :title="!isLink && title">
-    <template v-if="isLink">
+    <template v-if="!!to">
       <router-link :to="to" :title="title">
         <font-awesome-icon :icon="icon" />
       </router-link>
     </template>
-    <template v-if="!isLink">
+    <template v-else>
       <font-awesome-icon :icon="icon" />
     </template>
   </li>
@@ -17,8 +17,7 @@ export default {
   props: {
     to: { type: Object },
     title: { type: String },
-    icon: { type: Array },
-    isLink: { type: Boolean, default: true }
+    icon: { type: Array }
   }
 };
 </script>

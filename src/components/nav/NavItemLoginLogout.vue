@@ -1,34 +1,33 @@
 <template>
   <NavItem
-    :to="{ name: 'auth-login' }"
+    :to="!hasAuthData && { name: 'auth', params: { authMode: 'login' } }"
     :icon="['fas', icon]"
     :title="title"
-    :isLink="!user"
     @click="handleClick"
   />
 </template>
 
 <script>
 import NavItem from "./NavItem";
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     NavItem
   },
   computed: {
-    ...mapState("auth", ["user"]),
+    ...mapGetters("auth", ["hasAuthData"]),
     icon() {
-      return this.user ? "sign-out-alt" : "sign-in-alt";
+      return this.hasAuthData ? "sign-out-alt" : "sign-in-alt";
     },
     title() {
-      return this.user ? "Sign Out" : "Sign In";
+      return this.hasAuthData ? "Sign Out" : "Sign In";
     }
   },
   methods: {
     ...mapActions(["resetAll"]),
     handleClick() {
-      if (!this.user) return;
+      if (!this.hasAuthData) return;
       this.resetAll();
     }
   }
