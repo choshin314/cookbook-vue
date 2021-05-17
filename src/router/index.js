@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 
+import store from '@/store'
 import RecipeCreate from "@/views/RecipeCreate";
 import Auth from "@/views/Auth";
 
@@ -23,12 +24,18 @@ const routes = [
   {
     path: "/feeds/home",
     name: "home-private",
-    props: { feedType: "private" }
+    props: { feedType: "private" },
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/recipes/create",
     name: "create-recipe",
-    component: RecipeCreate
+    component: RecipeCreate,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/account/login",
@@ -48,5 +55,27 @@ const router = new Router({
   mode: "history",
   routes
 });
+
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.requiresAuth) {
+    if (!store.getters['auth/hasAuthData']) {
+      //if protected route but no auth data in store, redirect to login with redirect ref
+      //login page will be watching on create for redirectedFrom. 
+      //if login has redirectedFrom property, will auto clear the store to flush stale tokens
+      next({ name: 'auth-login', redirectedFrom: { name: to.name }})
+    } else {
+      //send request
+      //if rejected (after attempting refresh), redirect
+      try {
+        //
+      } catch (err) {
+        if (err.response.status === 401 || err.response.status === 403) {
+          //if 
+          next({ name: 'auth-login', redirectedFrom: { name: to.name }})
+        }
+      }
+    }
+  } else next() 
+}))
 
 export default router;

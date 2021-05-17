@@ -16,7 +16,9 @@ export default {
   namespaced: true,
   state: initState,
 
-  getters: {},
+  getters: {
+    hasAuthData(state) => (state.user !== null && state.accessToken && state.refreshToken)
+  },
 
   mutations: {
     LOGIN_USER: (state, payload) => {
