@@ -29,7 +29,6 @@
 
 <script>
 import AuthForm from "./AuthForm";
-import authService from "@/services/AuthService";
 import { mapActions } from "vuex";
 
 export default {
@@ -56,8 +55,6 @@ export default {
         console.log("required fields!");
         return;
       }
-      const response = await authService.postLogin(this.values);
-      console.log(response);
     },
     ...mapActions("auth", ["loginOrRegister"])
   }

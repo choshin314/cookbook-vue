@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import store from '@/store'
+import store from "@/store";
 import RecipeCreate from "@/views/RecipeCreate";
 import Auth from "@/views/Auth";
 
@@ -26,7 +26,8 @@ const routes = [
     name: "home-private",
     props: { feedType: "private" },
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      redirectOnNoAuth: true
     }
   },
   {
@@ -34,20 +35,26 @@ const routes = [
     name: "create-recipe",
     component: RecipeCreate,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      redirectOnNoAuth: false
     }
   },
   {
-    path: "/account/login",
-    name: "auth-login",
+    path: "/auth/:authMode",
+    name: "auth",
     component: Auth,
-    props: { authMode: "login" }
-  },
-  {
-    path: "/account/register",
-    name: "auth-register",
-    component: Auth,
-    props: { authMode: "register" }
+    props: true,
+    beforeEnter(routeTo, routeFrom, next) {
+      if (store.getters["auth/hasAuthData"]) {
+        //redirect if already logged in
+        next({ name: "home-private" });
+      } else if (!["login", "register"].includes(routeTo.params.authMode)) {
+        next(false);
+        //TODO: Replace this with redirect to 404 not found page
+      } else {
+        next();
+      }
+    }
   }
 ];
 
@@ -57,25 +64,18 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (to.meta.requiresAuth) {
-    if (!store.getters['auth/hasAuthData']) {
-      //if protected route but no auth data in store, redirect to login with redirect ref
-      //login page will be watching on create for redirectedFrom. 
-      //if login has redirectedFrom property, will auto clear the store to flush stale tokens
-      next({ name: 'auth-login', redirectedFrom: { name: to.name }})
-    } else {
-      //send request
-      //if rejected (after attempting refresh), redirect
-      try {
-        //
-      } catch (err) {
-        if (err.response.status === 401 || err.response.status === 403) {
-          //if 
-          next({ name: 'auth-login', redirectedFrom: { name: to.name }})
-        }
+  if (to.meta.requiresAuth && !store.getters["auth/hasAuthData"]) {
+    //if protected route but no auth data in store, redirect to login with redirect ref
+    //login page will be watching on create for redirectedFrom.
+    //if login has redirectedFrom property, will auto clear the store to flush stale tokens
+    next({
+      name: "auth",
+      params: {
+        authMode: "login",
+        referrer: { name: to.name }
       }
-    }
-  } else next() 
-}))
+    });
+  } else next();
+});
 
 export default router;

@@ -1,12 +1,12 @@
-import AuthService from "@/services/AuthService";
-import LocalStorageService from "@/services/LocalStorageService";
+import ajax from "@/services/AjaxService";
+import LSS from "@/services/LocalStorageService";
 import router from "@/router";
 
 function initState() {
   return {
-    user: LocalStorageService.getUser() || null,
-    accessToken: LocalStorageService.getAccessToken() || null,
-    refreshToken: LocalStorageService.getRefreshToken() || null,
+    user: LSS.getUser() || null,
+    accessToken: LSS.getAccessToken() || null,
+    refreshToken: LSS.getRefreshToken() || null,
     loading: false,
     error: null
   };
@@ -17,7 +17,9 @@ export default {
   state: initState,
 
   getters: {
-    hasAuthData(state) => (state.user !== null && state.accessToken && state.refreshToken)
+    hasAuthData(state) {
+      return state.user !== null && state.accessToken && state.refreshToken;
+    }
   },
 
   mutations: {
@@ -43,17 +45,16 @@ export default {
 
   actions: {
     loginOrRegister: ({ commit }, { mode, values }) => {
-      const service = () =>
-        mode === "login" ? AuthService.postLogin : AuthService.postRegistration;
       commit("RESET");
-      service()(values)
+      ajax
+        .postData(`/${mode}`, values)
         .then(res => {
           const {
             data: { accessToken, refreshToken, user }
           } = res.data;
-          LocalStorageService.setAccessToken(accessToken);
-          LocalStorageService.setRefreshToken(refreshToken);
-          LocalStorageService.setUser(user);
+          LSS.setAccessToken(accessToken);
+          LSS.setRefreshToken(refreshToken);
+          LSS.setUser(user);
           commit("SET_TOKENS", { accessToken, refreshToken });
           commit("LOGIN_USER", user);
           router.push({ name: "create-recipe" });
@@ -62,10 +63,13 @@ export default {
           commit("SET_ERROR", err.response.data.error);
         });
     },
+    saveNewAccessToken: ({ commit }, newToken) => {
+      commit("SET_TOKENS", { accessToken: newToken });
+    },
     reset: ({ commit }) => {
-      LocalStorageService.clearAll();
+      LSS.clearAll();
       commit("RESET");
-      router.push({ name: "auth-login" });
+      router.push({ name: "auth", params: { authMode: "login" } });
     }
     //logoutUser - commit reset, redirect to login screen
   }
