@@ -1,5 +1,5 @@
 <template>
-  <AuthForm>
+  <AuthForm @submit.prevent="loginOrRegister({ mode: 'register', values })">
     <div class="grid-row">
       <base-input
         type="text"
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import AuthForm from "./AuthForm";
 
 export default {
@@ -82,7 +83,8 @@ export default {
     handleChange(event) {
       const { name, checked, value, files } = event.target;
       this.values[name] = files || checked || value;
-    }
+    },
+    ...mapActions("auth", ["loginOrRegister"])
   }
 };
 </script>

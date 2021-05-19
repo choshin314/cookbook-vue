@@ -50,12 +50,6 @@ export default {
       const { name, checked, value, files } = event.target;
       this.values[name] = files || checked || value;
     },
-    async handleSubmit() {
-      if (!this.values.emailUsername || !this.values.password) {
-        console.log("required fields!");
-        return;
-      }
-    },
     ...mapActions("auth", ["loginOrRegister"])
   }
 };
