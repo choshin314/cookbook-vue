@@ -3,7 +3,7 @@ import LSService from "./LocalStorageService";
 import store from "@/store";
 
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL + "/auth",
+  baseURL: process.env.VUE_APP_API_URL,
   timeout: 5000,
   headers: {
     Accept: "application/json"
@@ -55,7 +55,7 @@ function sendData(path, data, method) {
   return instance.request({
     url: path,
     method,
-    data: JSON.stringify(data),
+    data,
     headers: {
       "Content-Type": "application/json",
       ...authHeader()
@@ -79,15 +79,19 @@ function sendMulti(path, payload, method) {
     if (field !== filesKey) toStringify[field] = data[field];
   }
   formData.append("formJSON", JSON.stringify(toStringify));
-  return instance.request(path, {
+  return instance.request({
+    url: path,
     method,
-    body: formData,
+    data: formData,
     headers: authHeader()
   });
 }
 
-function deleteData(path) {
-  return instance.delete(path, { headers: authHeader() });
+function deleteData(path, payload) {
+  return instance.delete(path, {
+    data: payload,
+    headers: authHeader()
+  });
 }
 
 export default {
