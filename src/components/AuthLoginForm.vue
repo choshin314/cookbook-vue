@@ -5,8 +5,7 @@
         type="text"
         label="Username or Email"
         name="emailUsername"
-        :value="values.emailUsername"
-        @input="handleChange"
+        v-model="values.emailUsername"
       />
     </div>
     <div class="input-row">
@@ -14,8 +13,7 @@
         type="password"
         label="Password"
         name="password"
-        :value="values.password"
-        @input="handleChange"
+        v-model="values.password"
       />
     </div>
     <base-button type="submit" variant="primary">Sign In</base-button>

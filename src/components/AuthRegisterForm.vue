@@ -5,15 +5,13 @@
         type="text"
         label="First Name"
         name="firstName"
-        :value="values.firstName"
-        @input="handleChange"
+        v-model="values.firstName"
       />
       <base-input
         type="text"
         label="Last Name"
         name="lastName"
-        :value="values.lastName"
-        @input="handleChange"
+        v-model="values.lastName"
       />
     </div>
     <div class="grid-row">
@@ -21,15 +19,13 @@
         type="text"
         label="Username"
         name="username"
-        :value="values.username"
-        @input="handleChange"
+        v-model="values.username"
       />
       <base-input
         type="email"
         label="Email Address"
         name="email"
-        :value="values.email"
-        @input="handleChange"
+        v-model="values.email"
       />
     </div>
     <div class="grid-row">
@@ -37,15 +33,13 @@
         type="password"
         label="Password"
         name="password"
-        :value="values.password"
-        @input="handleChange"
+        v-model="values.password"
       />
       <base-input
         type="password"
         label="Confirm Password"
         name="passwordConfirmation"
-        :value="values.passwordConfirmation"
-        @input="handleChange"
+        v-model="values.passwordConfirmation"
       />
     </div>
     <base-button type="submit" variant="primary">Get Cookin'</base-button>
