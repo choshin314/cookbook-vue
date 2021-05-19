@@ -25,10 +25,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["resetAll"]),
+    ...mapActions("auth", ["logout"]),
     handleClick() {
       if (!this.hasAuthData) return;
-      this.resetAll();
+      this.logout();
     }
   }
 };

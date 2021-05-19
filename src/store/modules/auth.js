@@ -47,7 +47,7 @@ export default {
     loginOrRegister: ({ commit }, { mode, values }) => {
       commit("RESET");
       ajax
-        .postData(`/${mode}`, values)
+        .postData(`/auth/${mode}`, values)
         .then(res => {
           const {
             data: { accessToken, refreshToken, user }
@@ -70,8 +70,17 @@ export default {
       LSS.clearAll();
       commit("RESET");
       router.push({ name: "auth", params: { authMode: "login" } });
+    },
+    logout: async ({ dispatch }) => {
+      try {
+        const refreshToken = LSS.getRefreshToken();
+        console.log(refreshToken);
+        dispatch("resetAll", null, { root: true });
+        await ajax.deleteData("/auth/logout/single-location", { refreshToken });
+      } catch (err) {
+        console.log(err);
+      }
     }
-    //logoutUser - commit reset, redirect to login screen
   }
 };
 //context properties: all properties/methods that the store instance has
