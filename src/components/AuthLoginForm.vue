@@ -1,5 +1,8 @@
 <template>
-  <AuthForm @submit.prevent="loginOrRegister({ mode: 'login', values })">
+  <AuthForm @submit.prevent="$emit('submitting-form')">
+    <template #formErrors>
+      <FormErrors :errors="errors" v-if="errors.length" />
+    </template>
     <div class="input-row">
       <base-input
         type="text"
@@ -27,28 +30,14 @@
 
 <script>
 import AuthForm from "./AuthForm";
-import { mapActions } from "vuex";
+import FormErrors from "./FormErrors.vue";
 
 export default {
   name: "AuthLoginForm",
-  components: { AuthForm },
-  data() {
-    return {
-      values: this.resetValues()
-    };
-  },
-  methods: {
-    resetValues() {
-      return {
-        emailUsername: "",
-        password: ""
-      };
-    },
-    handleChange(event) {
-      const { name, checked, value, files } = event.target;
-      this.values[name] = files || checked || value;
-    },
-    ...mapActions("auth", ["loginOrRegister"])
+  components: { AuthForm, FormErrors },
+  props: {
+    values: { type: Object, required: true },
+    errors: { type: Array, required: true }
   }
 };
 </script>

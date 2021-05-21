@@ -42,13 +42,17 @@ export default {
       this.submitting = false;
     },
 
-    validateInputs: validateInputs
+    validateInputs: validateInputs,
+    findError(field) {
+      return this.errors.find(err => err.field === field);
+    }
   },
 
   render() {
     return this.$scopedSlots.default({
       values: this.values,
       errors: this.errors,
+      findError: this.findError,
       validateAndSubmit: this.validateAndSubmit,
       submitting: this.submitting
     });

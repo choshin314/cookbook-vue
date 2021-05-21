@@ -44,9 +44,9 @@ export default {
   },
 
   actions: {
-    loginOrRegister: ({ commit }, { mode, values }) => {
+    loginOrRegister: async ({ commit }, { mode, values }) => {
       commit("RESET");
-      ajax
+      return ajax
         .postData(`/auth/${mode}`, values)
         .then(res => {
           const {
@@ -57,10 +57,11 @@ export default {
           LSS.setUser(user);
           commit("SET_TOKENS", { accessToken, refreshToken });
           commit("LOGIN_USER", user);
-          router.push({ name: "create-recipe" });
+          return true;
         })
         .catch(err => {
           commit("SET_ERROR", err.response.data.error);
+          return false;
         });
     },
     saveNewAccessToken: ({ commit }, newToken) => {

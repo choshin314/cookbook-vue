@@ -1,5 +1,8 @@
 <template>
-  <AuthForm @submit.prevent="loginOrRegister({ mode: 'register', values })">
+  <AuthForm @submit.prevent="$emit('submitting-form')">
+    <template #formErrors v-if="errors.length">
+      <FormErrors :errors="errors" />
+    </template>
     <div class="grid-row">
       <base-input
         type="text"
@@ -52,33 +55,15 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 import AuthForm from "./AuthForm";
+import FormErrors from "./FormErrors.vue";
 
 export default {
   name: "AuthRegisterForm",
-  components: { AuthForm },
-  data() {
-    return {
-      values: this.resetValues()
-    };
-  },
-  methods: {
-    resetValues() {
-      return {
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        password: "",
-        passwordConfirmation: ""
-      };
-    },
-    handleChange(event) {
-      const { name, checked, value, files } = event.target;
-      this.values[name] = files || checked || value;
-    },
-    ...mapActions("auth", ["loginOrRegister"])
+  components: { AuthForm, FormErrors },
+  props: {
+    values: { type: Object, required: true },
+    errors: { type: Array, required: true }
   }
 };
 </script>
