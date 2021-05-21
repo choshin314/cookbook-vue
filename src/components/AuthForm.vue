@@ -3,7 +3,8 @@
     <h1 class="form-title">
       <img src="@/assets/cookbook-logo.png" alt="cookbook" />
     </h1>
-    <form class="form" v-bind="$attrs" v-on="$listeners">
+    <slot name="formErrors"></slot>
+    <form class="form" v-bind="$attrs" v-on="$listeners" novalidate="true">
       <slot></slot>
     </form>
   </base-card>
@@ -33,7 +34,7 @@ export default {
   border-radius: 5px;
   position: relative;
   @media (min-width: $media-m) {
-    padding: $space-l;
+    padding: $space-m $space-l;
   }
   display: flex;
   flex-direction: column;

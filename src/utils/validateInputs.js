@@ -1,4 +1,4 @@
-import { EMAIL_REGEX } from "@/constants";
+import { RE_EMAIL } from "@/constants";
 
 class InputError {
   constructor(errors, field, label, message) {
@@ -52,7 +52,7 @@ export default function validateInputs(values, errors, constraints) {
       return new InputError(errors, field, label, msg);
     }
 
-    if (email && !EMAIL_REGEX.test(values[field])) {
+    if (email && !RE_EMAIL.test(values[field])) {
       const msg = "Valid email required";
       return new InputError(errors, field, label, msg);
     }

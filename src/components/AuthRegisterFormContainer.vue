@@ -18,6 +18,11 @@ import { mapActions } from "vuex";
 import AuthRegisterForm from "./AuthRegisterForm.vue";
 import FormContainer from "./FormContainer.js";
 
+const RE_PASSWORD = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+const PLAIN_PASSWORD = "Need at least one lowercase, uppercase, and number";
+const RE_USERNAME = /^[a-zA-Z0-9]+$/;
+const PLAIN_USERNAME = "Letters & numbers only";
+
 export default {
   components: { FormContainer, AuthRegisterForm },
   data() {
@@ -52,8 +57,8 @@ export default {
           label: "Username",
           constraints: {
             pattern: {
-              regex: /^[a-zA-Z0-9]+$/,
-              plain: "Letters & numbers only"
+              regex: RE_USERNAME,
+              plain: PLAIN_USERNAME
             },
             minLen: 2,
             maxLen: 30
@@ -73,8 +78,8 @@ export default {
             minLen: 8,
             maxLen: 16,
             pattern: {
-              regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-              plain: "Need at least one lowercase, uppercase, and number"
+              regex: RE_PASSWORD,
+              plain: PLAIN_PASSWORD
             }
           }
         },

@@ -1,14 +1,14 @@
 <template>
   <BaseMain>
-    <AuthLoginForm v-if="authMode === 'login'" />
-    <AuthRegisterForm v-if="authMode === 'register'" />
+    <AuthLoginFormContainer v-if="authMode === 'login'" />
+    <AuthRegisterFormContainer v-else-if="authMode === 'register'" />
     {{ referrer }}
   </BaseMain>
 </template>
 
 <script>
-import AuthLoginForm from "@/components/AuthLoginForm";
-import AuthRegisterForm from "@/components/AuthRegisterForm";
+import AuthLoginFormContainer from "@/components/AuthLoginFormContainer";
+import AuthRegisterFormContainer from "@/components/AuthRegisterFormContainer";
 export default {
   name: "Auth",
   props: {
@@ -16,8 +16,8 @@ export default {
     referrer: { type: String }
   },
   components: {
-    AuthLoginForm,
-    AuthRegisterForm
+    AuthLoginFormContainer,
+    AuthRegisterFormContainer
   }
 };
 </script>
