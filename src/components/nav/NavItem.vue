@@ -1,6 +1,6 @@
 <template>
-  <li class="nav-item" v-on="$listeners" :title="!to && title">
-    <template v-if="!!to">
+  <li class="nav-item" v-on="$listeners" :title="!to.name && title">
+    <template v-if="!!to.name">
       <router-link :to="to" :title="title">
         <font-awesome-icon :icon="icon" />
       </router-link>

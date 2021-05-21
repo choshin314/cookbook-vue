@@ -1,6 +1,6 @@
 <template>
   <NavItem
-    :to="!hasAuthData && { name: 'auth', params: { authMode: 'login' } }"
+    :to="linkConfig"
     :icon="['fas', icon]"
     :title="title"
     @click="handleClick"
@@ -22,6 +22,11 @@ export default {
     },
     title() {
       return this.hasAuthData ? "Sign Out" : "Sign In";
+    },
+    linkConfig() {
+      return this.hasAuthData
+        ? {}
+        : { name: "auth", params: { authMode: "login" } };
     }
   },
   methods: {
