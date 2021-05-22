@@ -7,7 +7,7 @@
         title="Home Feed"
       />
       <NavItem
-        :to="{ name: 'create-recipe' }"
+        :to="{ name: 'recipe-create' }"
         :icon="['far', 'plus-square']"
         title="Create Recipe"
       />

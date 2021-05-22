@@ -1,5 +1,5 @@
 <template>
-  <button class="button" :class="buttonClass">
+  <button v-on="$listeners" class="button" :class="buttonClass">
     <font-awesome-icon v-if="iconLeft" :icon="iconLeft" />
     <span :class="textClass">
       <slot> </slot>
