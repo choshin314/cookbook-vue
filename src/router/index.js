@@ -3,6 +3,7 @@ import Router from "vue-router";
 
 import store from "@/store";
 import RecipeCreate from "@/views/RecipeCreate";
+import RecipeView from "@/views/RecipeView";
 import Auth from "@/views/Auth";
 
 Vue.use(Router);
@@ -32,11 +33,27 @@ const routes = [
   },
   {
     path: "/recipes/create",
-    name: "create-recipe",
+    name: "recipe-create",
     component: RecipeCreate,
     meta: {
       requiresAuth: true,
       redirectOnNoAuth: false
+    }
+  },
+  {
+    path: "/recipes/view/:id-:slug",
+    name: "recipe-view",
+    component: RecipeView,
+    props: true,
+    async beforeEnter(routeTo, routeFrom, next) {
+      const { id } = routeTo.params;
+      const { recipe, error } = await store.dispatch("recipe/fetchRecipe", id);
+      if (recipe) {
+        routeTo.params.recipe = recipe;
+        next();
+      } else {
+        next({ path: `/${error}`, params: { referrer: routeFrom.name } });
+      }
     }
   },
   {

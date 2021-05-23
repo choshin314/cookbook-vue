@@ -1,15 +1,15 @@
 <template>
-	<Layout>
-		<router-view />
-	</Layout>
+  <Layout>
+    <router-view />
+  </Layout>
 </template>
 <script>
 import Layout from "./components/layout";
 
 export default {
-	components: {
-		Layout
-	}
+  components: {
+    Layout
+  }
 };
 </script>
 <style></style>

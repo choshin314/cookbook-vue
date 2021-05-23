@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import auth from "./modules/auth";
+import recipe from "./modules/recipe";
 
 Vue.use(Vuex);
 
@@ -13,7 +14,8 @@ function initState() {
 
 export default new Vuex.Store({
   modules: {
-    auth
+    auth,
+    recipe
   },
 
   state: initState,
