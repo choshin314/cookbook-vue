@@ -8,7 +8,7 @@ function initState() {
     accessToken: LSS.getAccessToken() || null,
     refreshToken: LSS.getRefreshToken() || null,
     loading: false,
-    error: null
+    error: ""
   };
 }
 
@@ -35,6 +35,9 @@ export default {
         state.refreshToken = payload.refreshToken;
       }
     },
+    TOGGLE_LOADING: state => {
+      state.loading = !state.loading;
+    },
     RESET: state => {
       const cleared = initState();
       for (let key in cleared) {
@@ -46,6 +49,7 @@ export default {
   actions: {
     loginOrRegister: async ({ commit }, { mode, values }) => {
       commit("RESET");
+      commit("TOGGLE_LOADING");
       return ajax
         .postData(`/auth/${mode}`, values)
         .then(res => {
@@ -56,11 +60,13 @@ export default {
           LSS.setRefreshToken(refreshToken);
           LSS.setUser(user);
           commit("SET_TOKENS", { accessToken, refreshToken });
+          commit("TOGGLE_LOADING");
           commit("LOGIN_USER", user);
           return true;
         })
         .catch(err => {
           commit("SET_ERROR", err.response.data.error);
+          commit("TOGGLE_LOADING");
           return false;
         });
     },

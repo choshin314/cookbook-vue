@@ -1,20 +1,19 @@
 <template>
   <FormContainer
-    v-slot="{ values, errors, validateAndSubmit }"
+    v-slot="{ values, errors, validateForm }"
     :defaultValues="defaultValues"
-    :handleSubmit="handleSubmit"
-    :constraints="constraints"
   >
     <AuthRegisterForm
       :values="values"
-      :errors="errors"
-      v-on:submitting-form="validateAndSubmit"
+      :inputErrors="errors"
+      :serverError="serverError"
+      v-on:submitting-form="handleSubmit(validateForm, values, schema)"
     />
   </FormContainer>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import AuthRegisterForm from "./AuthRegisterForm.vue";
 import FormContainer from "./FormContainer.js";
 
@@ -35,7 +34,7 @@ export default {
         password: "",
         passwordConfirmation: ""
       },
-      constraints: [
+      schema: [
         {
           field: "firstName",
           label: "First Name",
@@ -93,23 +92,22 @@ export default {
       ]
     };
   },
+  computed: mapState({ serverError: state => state.auth.error }),
   methods: {
-    async handleSubmit(payload) {
-      const { inputsAreValid, values, resetValues } = payload;
-      if (inputsAreValid) {
-        const success = await this.loginOrRegister({
-          mode: "register",
-          values
-        });
-        if (success) {
-          console.log("success!");
-          resetValues();
-          this.$router.push({ name: "create-recipe" });
-        }
-        return;
+    async handleSubmit(validateForm, values) {
+      const inputsAreValid = validateForm(this.schema)
+      if (!inputsAreValid) return;
+
+      const success = await this.loginOrRegister({
+        mode: "register",
+        values
+      });
+
+      if (success) {
+        console.log("success!");
+        this.$router.push({ name: "create-recipe" });
       } else {
-        console.log("validation failed");
-        return;
+        console.log('server-side error')
       }
     },
     ...mapActions("auth", ["loginOrRegister"])

@@ -1,20 +1,19 @@
 <template>
   <FormContainer
-    v-slot="{ values, errors, validateAndSubmit }"
+    v-slot="{ values, errors, validateForm }"
     :defaultValues="defaultValues"
-    :constraints="constraints"
-    :handleSubmit="handleSubmit"
   >
     <AuthLoginForm
       :values="values"
-      :errors="errors"
-      v-on:submitting-form="validateAndSubmit"
+      :inputErrors="errors"
+      :serverError="serverError"
+      v-on:submitting-form="handleSubmit(validateForm, values)"
     />
   </FormContainer>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import AuthLoginForm from "./AuthLoginForm.vue";
 import FormContainer from "./FormContainer.js";
 
@@ -23,7 +22,7 @@ export default {
   data() {
     return {
       defaultValues: { emailUsername: "", password: "" },
-      constraints: [
+      schema: [
         {
           field: "emailUsername",
           label: "Email or Username",
@@ -37,13 +36,14 @@ export default {
       ]
     };
   },
+  computed: mapState({ serverError: state => state.auth.error }),
   methods: {
-    async handleSubmit({ inputsAreValid, values, resetValues }) {
+    async handleSubmit(validateForm, values) {
+      const inputsAreValid = validateForm(this.schema)
       if (!inputsAreValid) return;
       const success = await this.loginOrRegister({ mode: "login", values });
       if (success) {
         console.log("success!");
-        resetValues();
         this.$router.push({ name: "create-recipe" });
       }
       return;

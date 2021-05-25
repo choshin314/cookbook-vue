@@ -1,7 +1,7 @@
 <template>
   <AuthForm @submit.prevent="$emit('submitting-form')">
-    <template #formErrors v-if="errors.length">
-      <FormErrors :errors="errors" />
+    <template #formErrors>
+      <FormErrors :inputErrors="inputErrors" :serverError="serverError"/>
     </template>
     <div class="grid-row">
       <base-input
@@ -63,8 +63,9 @@ export default {
   components: { AuthForm, FormErrors },
   props: {
     values: { type: Object, required: true },
-    errors: { type: Array, required: true }
-  }
+    inputErrors: { type: Array, required: true },
+    serverError: { type: String, required: true }
+  },
 };
 </script>
 

@@ -12,9 +12,9 @@ class InputError {
   }
 }
 
-export default function validateInputs(values, errors, constraints) {
-  if (!constraints) return true;
-  constraints.forEach(({ field, label, constraints }) => {
+export default function validateInputs(values, errors, validationSchema) {
+  if (!validationSchema) return true;
+  validationSchema.forEach(({ field, label, constraints }) => {
     const {
       required,
       email,
